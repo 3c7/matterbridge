@@ -17,9 +17,9 @@ import (
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 
 	"github.com/gorilla/websocket"
-	"github.com/hashicorp/golang-lru"
 	"github.com/jpillora/backoff"
 	"github.com/mattermost/platform/model"
+	"github.com/hashicorp/golang-lru"
 )
 
 type Credentials struct {
@@ -342,7 +342,7 @@ func (m *MMClient) parseActionPost(rmsg *Message) {
 		m.log.Infof("User %s is not known, ignoring message %s", data)
 		return
 	}
-	rmsg.Username = m.GetUserName(data.UserId)
+	rmsg.Username = m.GetNickName(data.UserId)
 	rmsg.Channel = m.GetChannelName(data.ChannelId)
 	rmsg.UserID = data.UserId
 	rmsg.Type = data.Type
@@ -754,6 +754,14 @@ func (m *MMClient) GetUserName(userId string) string {
 	user := m.GetUser(userId)
 	if user != nil {
 		return user.Username
+	}
+	return ""
+}
+
+func (m *MMClient) GetNickName(userId string) string {
+	user := m.GetUser(userId)
+	if user != nil {
+		return user.Nickname
 	}
 	return ""
 }
