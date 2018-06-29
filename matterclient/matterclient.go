@@ -74,14 +74,14 @@ type MMClient struct {
 func New(login, pass, team, server string) *MMClient {
 	cred := &Credentials{Login: login, Pass: pass, Team: team, Server: server}
 	mmclient := &MMClient{Credentials: cred, MessageChan: make(chan *Message, 100), Users: make(map[string]*model.User)}
-	log.SetFormatter(&prefixed.TextFormatter{PrefixPadding: 13, DisableColors: true})
+	log.SetFormatter(&prefixed.TextFormatter{SpacePadding: 13, DisableColors: true})
 	mmclient.log = log.WithFields(log.Fields{"prefix": "matterclient"})
 	mmclient.lruCache, _ = lru.New(500)
 	return mmclient
 }
 
 func (m *MMClient) SetDebugLog() {
-	log.SetFormatter(&prefixed.TextFormatter{PrefixPadding: 13, DisableColors: true, FullTimestamp: false, ForceFormatting: true})
+	log.SetFormatter(&prefixed.TextFormatter{SpacePadding: 13, DisableColors: true, FullTimestamp: false, ForceFormatting: true})
 }
 
 func (m *MMClient) SetLogLevel(level string) {
